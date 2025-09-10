@@ -41,7 +41,7 @@ def main():
     else:
         cmd = [
             "ansible-playbook",
-            "Playbook.yml",
+            "playbook.yml",
             "-i",
             args.inventory,
         ]
