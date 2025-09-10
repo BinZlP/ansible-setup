@@ -5,8 +5,6 @@ services:
     image: ubuntu:22.04
     container_name: nota-ansible
     hostname: nota-ansible
-    ports:
-      - "2222:22"
     volumes:
       - ./nota.priv:/root/.ssh/id_rsa
     networks:
@@ -20,7 +18,6 @@ services:
     hostname: nota-web
     ports:
       - "8080:80"
-      - "2223:22"
     volumes:
       - ./nota.pub:/root/.ssh/authorized_keys
     networks:
