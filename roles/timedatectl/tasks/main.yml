@@ -11,18 +11,10 @@
 
 - name: Enable and start chrony or systemd-timesyncd (try chrony first)
   block:
-    - name: Install chrony on apt
+    - name: Install chrony
       apt:
         name: chrony
         state: present
-      when: ansible_facts['pkg_mgr'] == 'apt'
-
-    - name: Install chrony on yum
-      yum:
-        name: chrony
-        state: present
-      when: ansible_facts['pkg_mgr'] in ['yum', 'dnf']
-
     - name: Ensure chrony enabled and started
       service:
         name: chrony
@@ -34,4 +26,3 @@
         name: systemd-timesyncd
         state: started
         enabled: yes
-      when: ansible_facts['pkg_mgr'] == 'apt'
