@@ -4,6 +4,10 @@
   become: true
   vars_files:
     - group_vars/all.yml
+    - group_vars/prometheus.yml
+    - group_vars/node-exporter.yml
+    - group_vars/grafana.yml
+    - group_vars/nginx.yml
 
   pre_tasks:
     - name: Ensure apt cache updated
