@@ -48,6 +48,14 @@
       when: roles_to_run is not defined or "'nginx' in roles_to_run"
 
   handlers:
+    - name: restart prometheus
+      systemd:
+        name: "{{ prometheus_service_name }}"
+        state: restarted
+    - name: restart node-exporter
+      systemd:
+        name: "{{ node_exporter_service_name }}"
+        state: restarted
     - name: restart nginx
       service:
         name: nginx

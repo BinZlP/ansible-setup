@@ -61,7 +61,7 @@
     src: "prometheus.service.j2"
     dest: "/etc/systemd/system/{{ prometheus_service_name }}"
     mode: '0644'
-  notify: Restart prometheus
+  notify: restart prometheus
 
 - name: Reload systemd
   command: systemctl daemon-reload
