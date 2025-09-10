@@ -6,11 +6,10 @@
     - group_vars/all.yml
 
   pre_tasks:
-    - name: Ensure apt cache updated (Debian/Ubuntu) if apt exists
+    - name: Ensure apt cache updated
       apt:
         update_cache: yes
         cache_valid_time: 3600
-      when: ansible_facts['pkg_mgr'] == 'apt'
 
   tasks:
     # Include each role via include_role so we keep Playbook.yml single-file and control execution via roles_to_run
