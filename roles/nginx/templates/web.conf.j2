@@ -4,7 +4,7 @@ upstream grafana_upstream {
 
 server {
   listen {{ nginx_listen_port }};
-  server_name _;
+  server_name {{ nginx_grafana_server_name }};
 
   location / {
     proxy_pass http://grafana_upstream;
