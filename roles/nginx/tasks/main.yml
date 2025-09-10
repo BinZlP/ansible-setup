@@ -1,16 +1,9 @@
 ---
-- name: Install nginx (apt)
+- name: Install nginx
   apt:
     name: nginx
     state: present
     update_cache: yes
-  when: ansible_facts['pkg_mgr'] == 'apt'
-
-- name: Install nginx (yum)
-  yum:
-    name: nginx
-    state: present
-  when: ansible_facts['pkg_mgr'] in ['yum', 'dnf']
 
 - name: Ensure nginx directories exist
   file:
