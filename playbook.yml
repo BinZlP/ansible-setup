@@ -1,5 +1,5 @@
 ---
-- name: Infra setup (single playbook for all roles)
+- name: Infra setup
   hosts: all
   become: true
   vars_files:
@@ -13,7 +13,7 @@
       when: ansible_facts['pkg_mgr'] == 'apt'
 
   tasks:
-    # We include each role via include_role so we keep Playbook.yml single-file and control execution via roles_to_run
+    # Include each role via include_role so we keep Playbook.yml single-file and control execution via roles_to_run
     - name: Run Default_common role
       include_role:
         name: default-common
