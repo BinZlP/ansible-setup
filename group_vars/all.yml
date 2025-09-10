@@ -11,4 +11,4 @@ common_packages:
   - rsync
 
 # Default roles to run
-roles_to_run: ['Default_common','Timedatectl','Prometheus','node-exporter','Grafana','Nginx']
+roles_to_run: ['default-common','timedatectl','prometheus','node-exporter','grafana','nginx']
