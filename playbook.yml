@@ -16,10 +16,6 @@
         cache_valid_time: 3600
 
   tasks:
-    - name: print roles_to_run
-      debug:
-        var: roles_to_run
-
     - name: Run default_common role
       include_role:
         name: default-common
