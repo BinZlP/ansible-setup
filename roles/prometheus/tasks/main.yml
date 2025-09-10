@@ -72,12 +72,3 @@
     name: "{{ prometheus_service_name }}"
     state: started
     enabled: yes
-
-- name: Ensure firewall allows prometheus port (optional, if firewalld)
-  when: ansible_facts['pkg_mgr'] in ['yum', 'dnf'] and ansible_facts['distribution_major_version'] is defined
-  firewalld:
-    port: 9090/tcp
-    permanent: yes
-    state: enabled
-    immediate: yes
-  ignore_errors: true
