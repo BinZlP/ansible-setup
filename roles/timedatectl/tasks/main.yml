@@ -6,8 +6,6 @@
 
 - name: Set timezone using timedatectl
   command: timedatectl set-timezone "{{ timezone }}"
-  args:
-    warn: false
 
 - name: Enable and start chrony or systemd-timesyncd (try chrony first)
   block:
