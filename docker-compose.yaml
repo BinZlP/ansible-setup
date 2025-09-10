@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  nota-ansible:
+    image: ubuntu:22.04
+    container_name: nota-ansible
+    hostname: nota-ansible
+    ports:
+      - "2222:22"
+    volumes:
+      - ./nota.priv:/root/.ssh/id_rsa
+    networks:
+      nota-network:
+        ipv4_address: 172.20.0.2
+    command: sleep infinity
+
+  nota-web:
+    image: ubuntu:22.04
+    container_name: nota-web
+    hostname: nota-web
+    ports:
+      - "8080:80"
+      - "2223:22"
+    volumes:
+      - ./nota.pub:/root/.ssh/authorized_keys
+    networks:
+      nota-network:
+        ipv4_address: 172.20.1.1
+    command: sleep infinity
+
+networks:
+  nota-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1

@@ -1,0 +1,51 @@
+---
+- name: Infra setup (single playbook for all roles)
+  hosts: all
+  become: true
+  vars_files:
+    - group_vars/all.yml
+
+  pre_tasks:
+    - name: Ensure apt cache updated (Debian/Ubuntu) if apt exists
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      when: ansible_facts['pkg_mgr'] == 'apt'
+
+  tasks:
+    # We include each role via include_role so we keep Playbook.yml single-file and control execution via roles_to_run
+    - name: Run Default_common role
+      include_role:
+        name: default-common
+      when: roles_to_run is not defined or "'default-common' in roles_to_run"
+
+    - name: Run Timedatectl role
+      include_role:
+        name: timedatectl
+      when: roles_to_run is not defined or "'timedatectl' in roles_to_run"
+
+    - name: Run Prometheus role
+      include_role:
+        name: prometheus
+      when: roles_to_run is not defined or "'prometheus' in roles_to_run"
+
+    - name: Run node-exporter role
+      include_role:
+        name: node-exporter
+      when: roles_to_run is not defined or "'node-exporter' in roles_to_run"
+
+    - name: Run Grafana role
+      include_role:
+        name: grafana
+      when: roles_to_run is not defined or "'grafana' in roles_to_run"
+
+    - name: Run Nginx role
+      include_role:
+        name: nginx
+      when: roles_to_run is not defined or "'nginx' in roles_to_run"
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted

@@ -1,0 +1,37 @@
+---
+- name: Ensure timezone directory exists
+  file:
+    path: /etc
+    state: directory
+
+- name: Set timezone using timedatectl
+  command: timedatectl set-timezone "{{ timezone }}"
+  args:
+    warn: false
+
+- name: Enable and start chrony or systemd-timesyncd (try chrony first)
+  block:
+    - name: Install chrony on apt
+      apt:
+        name: chrony
+        state: present
+      when: ansible_facts['pkg_mgr'] == 'apt'
+
+    - name: Install chrony on yum
+      yum:
+        name: chrony
+        state: present
+      when: ansible_facts['pkg_mgr'] in ['yum', 'dnf']
+
+    - name: Ensure chrony enabled and started
+      service:
+        name: chrony
+        state: started
+        enabled: yes
+  rescue:
+    - name: Fallback to systemd-timesyncd (Debian)
+      service:
+        name: systemd-timesyncd
+        state: started
+        enabled: yes
+      when: ansible_facts['pkg_mgr'] == 'apt'

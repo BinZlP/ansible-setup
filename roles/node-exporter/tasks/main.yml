@@ -1,0 +1,43 @@
+---
+- name: Create node_exporter user
+  user:
+    name: "{{ node_exporter_user }}"
+    system: yes
+    shell: /usr/sbin/nologin
+    createhome: no
+
+- name: Download node_exporter
+  get_url:
+    url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    dest: "/tmp/node_exporter-{{ node_exporter_version }}.tar.gz"
+    mode: '0644'
+
+- name: Extract node_exporter
+  unarchive:
+    src: "/tmp/node_exporter-{{ node_exporter_version }}.tar.gz"
+    dest: "/tmp/"
+    remote_src: yes
+
+- name: Copy node_exporter binary
+  copy:
+    src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter"
+    dest: "/usr/local/bin/node_exporter"
+    owner: "{{ node_exporter_user }}"
+    mode: '0755'
+
+- name: Place node-exporter systemd unit
+  template:
+    src: "node-exporter.service.j2"
+    dest: "/etc/systemd/system/{{ node_exporter_service_name }}"
+    mode: '0644'
+  notify: restart node-exporter
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  changed_when: false
+
+- name: Enable and start node-exporter
+  systemd:
+    name: "{{ node_exporter_service_name }}"
+    state: started
+    enabled: yes

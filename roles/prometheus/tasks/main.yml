@@ -1,0 +1,83 @@
+---
+- name: Create prometheus user
+  user:
+    name: "{{ prometheus_user }}"
+    system: yes
+    createhome: no
+    shell: /usr/sbin/nologin
+
+- name: Create prometheus directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ prometheus_user }}"
+    mode: '0755'
+  loop:
+    - "{{ prometheus_install_dir }}"
+    - "{{ prometheus_install_dir }}/data"
+    - "/etc/prometheus"
+
+- name: Download prometheus tarball
+  get_url:
+    url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
+    dest: "/tmp/prometheus-{{ prometheus_version }}.tar.gz"
+    mode: '0644'
+
+- name: Extract prometheus
+  unarchive:
+    src: "/tmp/prometheus-{{ prometheus_version }}.tar.gz"
+    dest: "/tmp/"
+    remote_src: yes
+
+- name: Copy prometheus binaries
+  copy:
+    src: "/tmp/prometheus-{{ prometheus_version }}.linux-amd64/{{ item }}"
+    dest: "{{ prometheus_install_dir }}/{{ item }}"
+    owner: "{{ prometheus_user }}"
+    mode: '0755'
+  loop:
+    - prometheus
+    - promtool
+
+- name: Copy consoles and console_libraries
+  copy:
+    src: "/tmp/prometheus-{{ prometheus_version }}.linux-amd64/{{ item }}"
+    dest: "{{ prometheus_install_dir }}/{{ item }}"
+    owner: "{{ prometheus_user }}"
+    mode: '0755'
+  loop:
+    - consoles
+    - console_libraries
+
+- name: Place prometheus config
+  copy:
+    src: "files/prometheus.yml"
+    dest: "{{ prometheus_config_file }}"
+    owner: "{{ prometheus_user }}"
+    mode: '0644'
+
+- name: Place systemd unit for prometheus
+  template:
+    src: "prometheus.service.j2"
+    dest: "/etc/systemd/system/{{ prometheus_service_name }}"
+    mode: '0644'
+  notify: Restart prometheus
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  changed_when: false
+
+- name: Enable and start prometheus
+  systemd:
+    name: "{{ prometheus_service_name }}"
+    state: started
+    enabled: yes
+
+- name: Ensure firewall allows prometheus port (optional, if firewalld)
+  when: ansible_facts['pkg_mgr'] in ['yum', 'dnf'] and ansible_facts['distribution_major_version'] is defined
+  firewalld:
+    port: 9090/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes
+  ignore_errors: true

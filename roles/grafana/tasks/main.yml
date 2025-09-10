@@ -1,0 +1,43 @@
+---
+- name: Install prerequisites (apt)
+  apt:
+    name: apt-transport-https
+    state: present
+  when: ansible_facts['pkg_mgr'] == 'apt'
+
+- name: Add Grafana APT key and repo (Debian/Ubuntu)
+  apt_key:
+    url: https://packages.grafana.com/gpg.key
+    state: present
+  when: ansible_facts['pkg_mgr'] == 'apt'
+
+- name: Add Grafana APT repo
+  apt_repository:
+    repo: 'deb https://packages.grafana.com/oss/deb stable main'
+    state: present
+  when: ansible_facts['pkg_mgr'] == 'apt'
+
+- name: Install grafana (apt)
+  apt:
+    name: "{{ grafana_package }}"
+    state: present
+    update_cache: yes
+  when: ansible_facts['pkg_mgr'] == 'apt'
+
+- name: Install grafana (yum)
+  yum:
+    name: grafana
+    state: present
+  when: ansible_facts['pkg_mgr'] in ['yum', 'dnf']
+
+- name: Ensure grafana enabled and started
+  service:
+    name: "{{ grafana_service_name }}"
+    state: started
+    enabled: yes
+
+- name: Wait for grafana to be up (port checking)
+  wait_for:
+    host: 127.0.0.1
+    port: 3000
+    timeout: 30

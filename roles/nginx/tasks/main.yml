@@ -1,0 +1,48 @@
+---
+- name: Install nginx (apt)
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+  when: ansible_facts['pkg_mgr'] == 'apt'
+
+- name: Install nginx (yum)
+  yum:
+    name: nginx
+    state: present
+  when: ansible_facts['pkg_mgr'] in ['yum', 'dnf']
+
+- name: Ensure nginx directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ nginx_sites_available }}"
+    - "{{ nginx_sites_enabled }}"
+
+- name: Deploy nginx.conf
+  template:
+    src: "nginx.conf.j2"
+    dest: "/etc/nginx/nginx.conf"
+    mode: '0644'
+  notify: restart nginx
+
+- name: Deploy site template to sites-available
+  template:
+    src: "web.conf.j2"
+    dest: "{{ nginx_sites_available }}/{{ nginx_site_name }}.conf"
+    mode: '0644'
+  notify: restart nginx
+
+- name: Ensure symlink in sites-enabled
+  file:
+    src: "{{ nginx_sites_available }}/{{ nginx_site_name }}.conf"
+    dest: "{{ nginx_sites_enabled }}/{{ nginx_site_name }}.conf"
+    state: link
+  notify: restart nginx
+
+- name: Ensure nginx enabled and started
+  service:
+    name: nginx
+    state: started
+    enabled: yes
