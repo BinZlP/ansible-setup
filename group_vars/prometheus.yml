@@ -6,3 +6,12 @@ prometheus_install_dir: "/opt/prometheus"
 prometheus_config_file: "/etc/prometheus/prometheus.yml"
 prometheus_web_listen: "0.0.0.0:9090"
 prometheus_service_name: "prometheus.service"
+
+# Arch. mapping
+prometheus_arch_map:
+  x86_64: "amd64"
+  aarch64: "arm64"
+  armv7l: "armv7"
+
+# Remote OS
+prometheus_os: "linux"

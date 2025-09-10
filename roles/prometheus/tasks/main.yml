@@ -17,14 +17,13 @@
     - "{{ prometheus_install_dir }}/data"
     - "/etc/prometheus"
 
-- name: Get arch. of remote host
-  setup:
-    filter: ansible_architecture
-  register: remote_arch
+- name: Set Prometheus architecture fact
+  set_fact:
+    prometheus_arch: "{{ prometheus_arch_map[ansible_architecture] | default('amd64') }}"
 
 - name: Download prometheus tarball
   get_url:
-    url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-{{ remote_arch.ansible_architecture }}.tar.gz"
+    url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.{{ prometheus_os }}-{{ prometheus_arch }}.tar.gz"
     dest: "/tmp/prometheus-{{ prometheus_version }}.tar.gz"
     mode: '0644'
 
@@ -36,7 +35,7 @@
 
 - name: Copy prometheus binaries
   copy:
-    src: "/tmp/prometheus-{{ prometheus_version }}.linux-{{ remote_arch.ansible_architecture }}/{{ item }}"
+    src: "/tmp/prometheus-{{ prometheus_version }}.{{ prometheus_os }}-{{ prometheus_arch }}/{{ item }}"
     dest: "{{ prometheus_install_dir }}/{{ item }}"
     owner: "{{ prometheus_user }}"
     mode: '0755'
@@ -47,7 +46,7 @@
 
 - name: Copy consoles and console_libraries
   copy:
-    src: "/tmp/prometheus-{{ prometheus_version }}.linux-{{ remote_arch.ansible_architecture }}/{{ item }}"
+    src: "/tmp/prometheus-{{ prometheus_version }}.{{ prometheus_os }}-{{ prometheus_arch }}/{{ item }}"
     dest: "{{ prometheus_install_dir }}/{{ item }}"
     owner: "{{ prometheus_user }}"
     mode: '0755'
