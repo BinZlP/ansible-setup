@@ -16,7 +16,6 @@
         cache_valid_time: 3600
 
   tasks:
-    # Include each role via include_role so we keep Playbook.yml single-file and control execution via roles_to_run
     - name: Run Default_common role
       include_role:
         name: default-common
