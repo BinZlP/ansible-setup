@@ -1,0 +1,6 @@
+---
+# Grafana settings
+grafana_package: "grafana"   # apt repo package name
+grafana_admin_user: "admin"
+grafana_admin_password: "admin"
+grafana_service_name: "grafana-server"

@@ -2,7 +2,7 @@
 # timezone
 timezone: "Asia/Seoul"
 
-# common packages for Default_common
+# common packages for default-common
 common_packages:
   - curl
   - dstat
@@ -10,33 +10,5 @@ common_packages:
   - net-tools
   - rsync
 
-# Prometheus settings
-prometheus_version: "2.52.0"    # 필요시 변경
-prometheus_user: "prometheus"
-prometheus_install_dir: "/opt/prometheus"
-prometheus_config_file: "/etc/prometheus/prometheus.yml"
-prometheus_web_listen: "0.0.0.0:9090"
-prometheus_service_name: "prometheus.service"
-
-# node-exporter settings
-node_exporter_version: "1.7.1"
-node_exporter_user: "node_exporter"
-node_exporter_service_name: "node-exporter.service"
-node_exporter_port: 9100
-
-# Grafana settings
-grafana_package: "grafana"   # apt repo package name (assumes Debian/Ubuntu). RPM-based will work similarly.
-grafana_admin_user: "admin"
-grafana_admin_password: "admin"  # 초기 비밀번호. 운영에서는 vault 사용 권장.
-grafana_service_name: "grafana-server"
-
-# Nginx / site settings
-nginx_site_name: "web"
-nginx_sites_available: "/etc/nginx/sites-available"
-nginx_sites_enabled: "/etc/nginx/sites-enabled"
-nginx_listen_port: 80
-upstream_grafana_host: "127.0.0.1"
-upstream_grafana_port: 3000
-
-# Which roles to run by default (comment out to run all)
-# roles_to_run: ['Default_common','Timedatectl','Prometheus','node-exporter','Grafana','Nginx']
+# Default roles to run
+roles_to_run: ['Default_common','Timedatectl','Prometheus','node-exporter','Grafana','Nginx']
