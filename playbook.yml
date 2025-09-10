@@ -16,35 +16,39 @@
         cache_valid_time: 3600
 
   tasks:
-    - name: Run Default_common role
+    - name: print roles_to_run
+      debug:
+        var: roles_to_run
+
+    - name: Run default_common role
       include_role:
         name: default-common
-      when: roles_to_run is not defined or "'default-common' in roles_to_run"
+      when: '"default-common" in roles_to_run'
 
-    - name: Run Timedatectl role
+    - name: Run timedatectl role
       include_role:
         name: timedatectl
-      when: roles_to_run is not defined or "'timedatectl' in roles_to_run"
+      when: '"timedatectl" in roles_to_run'
 
-    - name: Run Prometheus role
+    - name: Run prometheus role
       include_role:
         name: prometheus
-      when: roles_to_run is not defined or "'prometheus' in roles_to_run"
+      when: '"prometheus" in roles_to_run'
 
-    - name: Run node-exporter role
+    - name: Run node_exporter role
       include_role:
         name: node-exporter
-      when: roles_to_run is not defined or "'node-exporter' in roles_to_run"
+      when: '"node-exporter" in roles_to_run'
 
-    - name: Run Grafana role
+    - name: Run grafana role
       include_role:
         name: grafana
-      when: roles_to_run is not defined or "'grafana' in roles_to_run"
+      when: '"grafana" in roles_to_run'
 
-    - name: Run Nginx role
+    - name: Run nginx role
       include_role:
         name: nginx
-      when: roles_to_run is not defined or "'nginx' in roles_to_run"
+      when: '"nginx" in roles_to_run'
 
   handlers:
     - name: restart prometheus

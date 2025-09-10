@@ -52,10 +52,11 @@ def main():
                 if role not in SUPPORTED_ROLES:
                     print(f"[ERROR] Invalid role: {role}")
                     sys.exit(1)
+            roles_string = ",".join(target_roles)
             cmd.extend(
                 [
                     "--extra-vars",
-                    "roles_to_run=[{}].format(''.join(target_roles))",
+                    f"roles_to_run=[{roles_string}]",
                 ]
             )
 
