@@ -1,13 +1,6 @@
 ---
-- name: Ensure common packages are installed (Debian/Ubuntu)
+- name: Ensure common packages are installed
   apt:
     name: "{{ common_packages }}"
     state: present
     update_cache: yes
-  when: ansible_facts['pkg_mgr'] == 'apt'
-
-- name: Ensure common packages are installed (RHEL/CentOS)
-  yum:
-    name: "{{ common_packages }}"
-    state: present
-  when: ansible_facts['pkg_mgr'] in ['yum', 'dnf']
