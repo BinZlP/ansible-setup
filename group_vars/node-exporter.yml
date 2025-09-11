@@ -1,6 +1,6 @@
 ---
 # node-exporter settings
-node_exporter_version: "1.7.1"
+node_exporter_version: "1.9.1"
 node_exporter_user: "node_exporter"
 node_exporter_service_name: "node-exporter.service"
 node_exporter_port: 9100
