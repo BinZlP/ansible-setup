@@ -57,8 +57,8 @@
 
 - name: Copy dashboard JSONs
   copy:
-    src: node_exporter_full.json
-    dest: /var/lib/grafana/dashboards/node_exporter_full.json
+    src: node-exporter-full.json
+    dest: /var/lib/grafana/dashboards/node-exporter-full.json
     owner: "{{ grafana_user }}"
     group: "{{ grafana_user }}"
     mode: 0644
