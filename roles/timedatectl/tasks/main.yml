@@ -1,9 +1,4 @@
 ---
-- name: Ensure timezone directory exists
-  file:
-    path: /etc
-    state: directory
-
 - name: Set timezone using timedatectl
   command: timedatectl set-timezone "{{ timezone }}"
 
