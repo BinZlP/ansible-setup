@@ -1,4 +1,11 @@
 ---
+- name: Create nginx user
+  user:
+    name: "{{ nginx_user }}"
+    system: yes
+    createhome: no
+    shell: /usr/sbin/nologin
+
 - name: Install nginx
   apt:
     name: nginx

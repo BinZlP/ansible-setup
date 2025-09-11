@@ -4,6 +4,7 @@ nginx_site_name: "web"
 nginx_sites_available: "/etc/nginx/sites-available"
 nginx_sites_enabled: "/etc/nginx/sites-enabled"
 nginx_listen_port: 80
+nginx_user: "nginx"
 nginx_grafana_server_name: "nota-web.grafana"
 upstream_grafana_host: "127.0.0.1"
 upstream_grafana_port: 3000
