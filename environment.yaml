@@ -1,0 +1,45 @@
+name: control-plane
+channels:
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=main
+  - _openmp_mutex=5.1=51_gnu
+  - bzip2=1.0.8=h998d150_6
+  - ca-certificates=2025.7.15=hd43f75c_0
+  - expat=2.7.1=h419075a_0
+  - ld_impl_linux-aarch64=2.40=h48e3ba3_0
+  - libffi=3.4.4=h419075a_1
+  - libgcc-ng=11.2.0=h1234567_1
+  - libgomp=11.2.0=h1234567_1
+  - libstdcxx-ng=11.2.0=h1234567_1
+  - libuuid=1.41.5=h998d150_0
+  - libxcb=1.17.0=hf66535e_0
+  - ncurses=6.5=h419075a_0
+  - openssl=3.0.17=h998d150_0
+  - pip=25.2=pyhc872135_0
+  - pthread-stubs=0.3=hfd63f10_1
+  - python=3.12.11=h21bda81_0
+  - readline=8.3=h886d1d0_0
+  - setuptools=78.1.1=py312hd43f75c_0
+  - sqlite=3.50.2=h998d150_1
+  - tk=8.6.15=h987d8db_0
+  - tzdata=2025b=h04d1e81_0
+  - wheel=0.45.1=py312hd43f75c_0
+  - xorg-libx11=1.8.12=hf66535e_1
+  - xorg-libxau=1.0.12=hf66535e_0
+  - xorg-libxdmcp=1.1.5=hf66535e_0
+  - xorg-xorgproto=2024.1=h998d150_1
+  - xz=5.6.4=h998d150_1
+  - zlib=1.2.13=h6185dc7_2
+  - pip:
+      - ansible==12.0.0
+      - ansible-core==2.19.2
+      - cffi==2.0.0
+      - cryptography==45.0.7
+      - jinja2==3.1.6
+      - markupsafe==3.0.2
+      - packaging==25.0
+      - pycparser==2.23
+      - pyyaml==6.0.2
+      - resolvelib==1.2.0
+prefix: /home/ubuntu/miniconda3/envs/control-plane
