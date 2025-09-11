@@ -21,10 +21,6 @@
   set_fact:
     prometheus_arch: "{{ prometheus_arch_map[ansible_architecture] | default('amd64') }}"
 
-- name: debug
-  debug:
-    var: prometheus_arch
-
 - name: Download prometheus tarball
   get_url:
     url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.{{ prometheus_os }}-{{ prometheus_arch }}.tar.gz"
