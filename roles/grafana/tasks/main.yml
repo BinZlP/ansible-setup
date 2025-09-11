@@ -4,6 +4,13 @@
     name: apt-transport-https
     state: present
 
+- name: Create grafana user
+  user:
+    name: "{{ grafana_user }}"
+    system: yes
+    createhome: no
+    shell: /usr/sbin/nologin
+
 - name: Add Grafana APT key and repo
   apt_key:
     url: https://packages.grafana.com/gpg.key
@@ -19,6 +26,42 @@
     name: "{{ grafana_package }}"
     state: present
     update_cache: yes
+
+- name: Ensure grafana directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ grafana_user }}"
+    group: "{{ grafana_user }}"
+    mode: 0755
+  loop:
+    - /etc/grafana/provisioning/datasources
+    - /etc/grafana/provisioning/dashboards
+    - /var/lib/grafana/dashboards
+
+- name: Deploy Prometheus datasource config
+  template:
+    src: datasource.yml.j2
+    dest: /etc/grafana/provisioning/datasources/datasource.yml
+    owner: "{{ grafana_user }}"
+    group: "{{ grafana_user }}"
+    mode: 0644
+
+- name: Deploy dashboards provider config
+  template:
+    src: dashboard.yml.j2
+    dest: /etc/grafana/provisioning/dashboards/dashboard.yml
+    owner: "{{ grafana_user }}"
+    group: "{{ grafana_user }}"
+    mode: 0644
+
+- name: Copy dashboard JSONs
+  copy:
+    src: node_exporter_full.json
+    dest: /var/lib/grafana/dashboards/node_exporter_full.json
+    owner: "{{ grafana_user }}"
+    group: "{{ grafana_user }}"
+    mode: 0644
 
 - name: Ensure grafana enabled and started
   service:
